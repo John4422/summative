@@ -17,7 +17,11 @@ namespace summative
 
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private List<Sprites.Sprites> _sprites;
+        Rectangle position;
+        Vector2 velocity;
+        Rectangle position2;
+        Vector2 velocity2;
+        Vector2 pause;
         Texture2D grinTexture;
         Texture2D grinndog;
         Rectangle grinndogRect;
@@ -25,11 +29,11 @@ namespace summative
         MouseState mousestate;
         Texture2D Krumpit;
         Song UrMean;
+        Song Welcome;
         Screen screen;
         enum Screen
         {
             intro,
-            grinRect,
             anamate,
             
         }
@@ -45,7 +49,11 @@ namespace summative
         {
             // TODO: Add your initialization logic here
             screen = Screen.intro;
-
+            velocity = new Vector2 (0,3);
+            velocity2 = new Vector2 (3,0);
+            position = new Rectangle(155, 390, 0, 0);
+            position2 = new Rectangle(551, 390, 0, 0);
+            pause = new Vector2(0,0);
             grinndogRect = new Rectangle(120, 80, 80 ,80);
             grinRect = new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
             base.Initialize();
@@ -59,6 +67,7 @@ namespace summative
             grinTexture = Content.Load<Texture2D>("The-Grinch background");
             grinndog = Content.Load<Texture2D>("Grinch-and-dog");
             Krumpit = Content.Load<Texture2D>("Mt.-Krumpit");
+            Welcome = Content.Load<Song>("Welcome.Mp3");
             UrMean = Content.Load<Song>("Y2Mate.is - You're a Mean One, Mr Grinch _ Dr Seuss-3Hj3U18FHgQ-96k-1657043497269");
         }
 
@@ -66,7 +75,7 @@ namespace summative
         {
 
             mousestate = Mouse.GetState();
-
+            this.Window.Title = mousestate.X.ToString() + "'" + mousestate.Y.ToString();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             if (screen == Screen.intro)
@@ -76,7 +85,7 @@ namespace summative
             }
             else if (screen == Screen.anamate)
             {
-
+                
             }
 
             if (mousestate.LeftButton == ButtonState.Pressed)
@@ -102,13 +111,22 @@ namespace summative
             }
             else if (screen == Screen.anamate)
             {
+                if (grinndogRect.Y < 390)
+                {
+                    grinndogRect.Y += 2;
+                }
+                if (grinndogRect.Y >= 390)
+                {
+                    grinndogRect.X += 2;
+                }
+                if (grinndogRect.X >= 444)
+                {
+                    MediaPlayer.Stop();
+                    MediaPlayer.Play(Welcome);
+                    grinndogRect.X = 444;
+                }
                 _spriteBatch.Draw(Krumpit, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
                 _spriteBatch.Draw(grinndog, grinndogRect, Color.White);
-
-                if (grinndog == IsTouchingBottom)
-                {
-                    EndRun();
-                }
             }
             _spriteBatch.End();
             base.Draw(gameTime);

@@ -49,6 +49,12 @@
 /processorParam:TextureFormat=Color
 /build:The-Grinch background.png
 
+#begin Welcome.Mp3.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Welcome.Mp3.mp3
+
 #begin Y2Mate.is - You're a Mean One, Mr Grinch _ Dr Seuss-3Hj3U18FHgQ-96k-1657043497269.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
